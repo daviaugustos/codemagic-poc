@@ -39,6 +39,7 @@ jobs:
           key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-caches-
+
       - name: Make Gradlew Executable
         run: cd apps/mobile/android && chmod +x ./gradlew
 
@@ -76,10 +77,10 @@ jobs:
       - name: Check out Git repository # clone the repo to local ci workspace
         uses: actions/checkout@v2
 
-      ## - uses: actions/actions/download-artifact@v3
-      ##   with:
-      ##     name: app-release.apk
-      ##     path: apps/mobile/android/app/build/outputs/apk/release
+       - uses: actions/actions/download-artifact@v3
+         with:
+           name: app-release.apk
+          path: apps/mobile/android/app/build/outputs/apk/release
 
       - name: Set up our JDK environment # setup JDK environment: mandatory as we need to build  android project
         uses: actions/setup-java@v1.4.3
@@ -92,7 +93,7 @@ jobs:
           appName: davi.santos/Codemagic-POC
           token: ${{secrets.APPCENTER_TOKEN_ANDROID}}
           group: Public
-          file: apps/mobile/android/app/build/outputs/apk/release/app-release.apk
+          file: app-release.apk
           notifyTesters: true
           debug: false
 

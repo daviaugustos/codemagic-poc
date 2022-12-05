@@ -57,6 +57,12 @@ jobs:
           keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release.apk
+          path: apps/mobile/android/app/build/outputs/apk/release
+
   deploy:
     needs: [android-build]
     if: success()
@@ -70,7 +76,6 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: app-release.apk
-          path: apps/mobile/android/app/build/outputs/apk/release
 
       - name: Set up our JDK environment # setup JDK environment: mandatory as we need to build  android project
         uses: actions/setup-java@v1.4.3

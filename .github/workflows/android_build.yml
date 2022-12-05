@@ -20,7 +20,7 @@ jobs:
           java-version: 1.8
 
       - name: Install dependencies # install project deps with --frozen-lockfile to make sure we will have the same packages version ( very recommended  on running yarn install on ci)
-        run: npm ci
+        run: npm ci --legacy-peer-deps
 
       - name: Install local dependencies
         run: cd apps/mobile && npm i

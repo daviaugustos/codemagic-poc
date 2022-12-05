@@ -23,7 +23,7 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Install local dependencies
-        run: cd apps/mobile && npm i
+        run: cd apps/mobile && npm i --legacy-peer-deps
 
       ## configure cash for gradle : will help to reduce build time
       - name: Cache Gradle Wrapper

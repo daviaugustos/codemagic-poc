@@ -19,7 +19,7 @@ jobs:
 
       - uses: actions/checkout@v2
       - name: Build Android Composite
-        uses: ./.github/actions/android-release-build@v1
+        uses: daviaugustos/Nrwl-Nx-Android-Build-Action@v1
         with:
           app-path: ${{ env.NX_RN_APP_PATH }}
           signing-key: ${{ secrets.ANDROID_SIGNING_KEY }}

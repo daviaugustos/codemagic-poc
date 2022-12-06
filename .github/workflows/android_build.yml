@@ -25,8 +25,7 @@ jobs:
       - name: Install local dependencies
         run: cd apps/mobile && npm i --legacy-peer-deps
 
-      ## configure cash for gradle : will help to reduce build time
-      - name: Cache Gradle Wrapper
+      - name: Cache Gradle Wrapper ## configure cash for gradle : will help to reduce build time
         uses: actions/cache@v2
         with:
           path: ~/.gradle/wrapper
@@ -39,6 +38,7 @@ jobs:
           key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-caches-
+
       - name: Make Gradlew Executable
         run: cd apps/mobile/android && chmod +x ./gradlew
 
@@ -46,8 +46,7 @@ jobs:
         run: |
           cd apps/mobile/android && ./gradlew app:assembleRelease --no-daemon
 
-      ## sign generated apk
-      - name: Sign APK
+      - name: Sign APK ## sign generated apk
         id: sign_app
         uses: r0adkll/sign-android-release@v1
         with:
@@ -95,4 +94,4 @@ jobs:
       - name: Delete Artifact
         uses: geekyeggo/delete-artifact@v1
         with:
-          name: ${{ env.ARTIFACT_NAME }}
+          name: app-release.apk

@@ -17,7 +17,7 @@ jobs:
       - name: Check out Git repository # clone the repo to local ci workspace
         uses: actions/checkout@v2
 
-      - uses: actions/checkout@v2
+      - name: Build Android Composite
         uses: ./.github/actions/android-release-build
         with:
           app-path: ${{ env.NX_RN_APP_PATH }}

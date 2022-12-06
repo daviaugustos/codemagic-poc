@@ -19,7 +19,7 @@ jobs:
 
       - uses: actions/checkout@v2
       - name: Build Android Composite
-        uses: daviaugustos/Nrwl-Nx-Android-Build-Action@v1
+        uses: daviaugustos/Nrwl-Nx-Android-Build-Action@v2
         shell: bash
         with:
           app-path: ${{ env.NX_RN_APP_PATH }}

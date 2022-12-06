@@ -5,6 +5,9 @@ on:
   release:
     types: [published] # only run the workflow when a new release has been published
 
+env:
+  NX_RN_APP_PATH: ${{ 'apps/mobile' }}
+
 jobs:
   android-build:
     name: Android Build
@@ -22,11 +25,11 @@ jobs:
       - name: Install dependencies # install project deps with --frozen-lockfile to make sure we will have the same packages version ( very recommended  on running yarn install on ci)
         run: npm ci --legacy-peer-deps
 
-      - name: Install local dependencies
-        run: cd apps/mobile && npm i --legacy-peer-deps
+      - name: Install app dependencies
+        run: cd ${{ env.NX_RN_APP_PATH }} && npm i --legacy-peer-deps
 
       - name: Cache Gradle Wrapper ## configure cash for gradle : will help to reduce build time
-        uses: actions/cache@v2
+        uses: actions/cache@v2 ## TODO FIX THE PATH
         with:
           path: ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
@@ -40,17 +43,17 @@ jobs:
             ${{ runner.os }}-gradle-caches-
 
       - name: Make Gradlew Executable
-        run: cd apps/mobile/android && chmod +x ./gradlew
+        run: cd ${{ env.NX_RN_APP_PATH }}/android && chmod +x ./gradlew
 
       - name: Generate App APK
         run: |
-          cd apps/mobile/android && ./gradlew app:assembleRelease --no-daemon
+          cd ${{ env.NX_RN_APP_PATH }}/android && ./gradlew app:assembleRelease --no-daemon
 
       - name: Sign APK ## sign generated apk
         id: sign_app
         uses: r0adkll/sign-android-release@v1
         with:
-          releaseDirectory: apps/mobile/android/app/build/outputs/apk/release
+          releaseDirectory: ${{ env.NX_RN_APP_PATH }}/android/app/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
           alias: ${{ secrets.ANDROID_ALIAS }}
           keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
@@ -60,7 +63,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: app-release.apk
-          path: apps/mobile/android/app/build/outputs/apk/release
+          path: ${{ env.NX_RN_APP_PATH }}/android/app/build/outputs/apk/release
 
   deploy:
     needs: [android-build]
